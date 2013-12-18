@@ -20,11 +20,11 @@ bash "install hubot-irc" do
   EOH
 end
 
-cookbook_file "/home/vagrant/myhubot-official/live_hubot.sh" do
+template "/home/vagrant/myhubot-official/live_hubot.sh" do
   owner "vagrant"
   group "vagrant"
   mode "0755"
-  source "live_hubot.sh"
+  source "irc_live_hubot.sh.erb"
 end
 
 cookbook_file "/home/vagrant/myhubot-official/package.json" do

@@ -8,69 +8,72 @@ include_recipe "hubot-solo::nodejs"
 include_recipe "hubot-solo::foreverjs"
 include_recipe "hubot-solo::redis"
 
+hubot_home="#{node[:hubotsolo][:deploy_home]}"
+
 bash "install hubot-irc" do
-  user "vagrant"
-  cwd "/home/vagrant/"
-  creates "maybe"
+  user node[:hubotsolo][:deploy_user]
+  cwd node[:hubotsolo][:deploy_home]
+  creates "/home/vagrant/node_modules/hubot-irc/Makefile"
   code <<-EOH
   STATUS=0
   HOME=/home/vagrant
-  export PATH=$HOME/local/bin:$PATH || STATUS=1
+  export PATH=/home/vagrant/local/bin:$PATH || STATUS=1
+  cd $HOME
   npm install hubot-irc || STATUS=1
   exit $STATUS
   EOH
 end
 
-directory "/home/vagrant/repo/" do
-  owner "vagrant"
-  group "vagrant"
+directory "#{hubot_home}/repo/" do
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   recursive true
 end
 
-directory "/home/vagrant/scripts" do
-  owner "vagrant"
-  group "vagrant"
+directory "#{hubot_home}/scripts" do
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   recursive true
 end
 
-git "/home/vagrant/repo/hubot" do
-  repo "https://github.com/jjasghar/myhubot.git"
-  user "vagrant"
-  group "vagrant"
+git "#{hubot_home}/repo/hubot" do
+  repo node[:hubotsolo][:personal_hubot_repo]
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   action :sync
 end
 
-cookbook_file "/home/vagrant/repo/hubot/live_hubot.sh" do
-  owner "vagrant"
-  group "vagrant"
+template "/home/vagrant/repo/hubot/live_hubot.sh" do
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   mode "0755"
-  source "live_hubot.sh"
+  source "irc_live_hubot.sh.erb"
 end
 
 file "/home/vagrant/repo/hubot/forever.log" do
-  owner "vagrant"
-  group "vagrant"
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   mode "0644"
   action :delete
 end
 
 file "/home/vagrant/repo/hubot/out.log" do
-  owner "vagrant"
-  group "vagrant"
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   mode "0644"
   action :delete
 end
 
 file "/home/vagrant/repo/hubot/err.log" do
-  owner "vagrant"
-  group "vagrant"
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   mode "0644"
   action :delete
 end
 
 file "/home/vagrant/.forever/forever.log" do
-  owner "vagrant"
-  group "vagrant"
+  user node[:hubotsolo][:deploy_user]
+  group node[:hubotsolo][:deploy_group]
   mode "0644"
   action :delete
 end
