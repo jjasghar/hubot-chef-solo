@@ -4,11 +4,6 @@
 #
 #
 
-execute "update apt-cache" do
-  command "apt-get update"
-  action :run
-end
-
 %w{curl build-essential wget libyaml-dev zlib1g-dev libreadline-dev
    libssl-dev tk-dev libgdbm-dev}.each do |pkg|
     package pkg do
