@@ -1,4 +1,4 @@
-# Hubot-solo
+# Hubot chef-solo bootstrap
 
 This is my chef-solo scripts to build a hubot. I have it pulling from my
 [myhubot](https://github.com/jjasghar/myhubot) but you can also pull it 
