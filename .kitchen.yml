@@ -1,6 +1,7 @@
 ---
 driver:
   name: vagrant
+  provider: vmware_fusion
 
 provisioner:
   name: chef_solo
